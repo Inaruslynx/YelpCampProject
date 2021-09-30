@@ -1,7 +1,7 @@
 {
-  "name": "node-http-server",
+  "name": "YelpCamp",
   "version": "1.0.0",
-  "description": "Node.js example server starter project",
+  "description": "YelpCamp is a learning project based on the Udemy Course - The Web Developer Bootcamp 2021",
   "main": "src/index.js",
   "scripts": {
     "start": "nodemon src/index.js"
