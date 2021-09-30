@@ -12,7 +12,7 @@ const ExpressError = require("./utils/ExpressError");
 const campgrounds = require("./routes/campgrounds");
 const reviews = require("./routes/reviews");
 
-const uri = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@cluster0.kyfef.mongodb.net/yelp-camp?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0.kyfef.mongodb.net/yelp-camp?retryWrites=true&w=majority`;
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
@@ -34,7 +34,7 @@ app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname + "/public")));
 
 const sessionConfig = {
-  secret: SESSION_SECRET,
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
