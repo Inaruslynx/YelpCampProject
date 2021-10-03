@@ -7,10 +7,14 @@ const flash = require("connect-flash");
 const methodOverride = require("method-override");
 const morgan = require("morgan");
 const ExpressError = require("./utils/ExpressError");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user");
 // const { seed } = require("./seed/seed");
 
-const campgrounds = require("./routes/campgrounds");
-const reviews = require("./routes/reviews");
+const campgroundRoutes = require("./routes/campgrounds");
+const reviewRoutes = require("./routes/reviews");
+const userRoutes = require("./routes/users");
 
 const uri = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0.kyfef.mongodb.net/yelp-camp?retryWrites=true&w=majority`;
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -41,11 +45,18 @@ const sessionConfig = {
     //                    ms     s    m    h    d
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
     maxAge: 1000 * 60 * 60 * 24 * 7,
-    httpOnly: true
-  }
+    httpOnly: true,
+  },
 };
 app.use(session(sessionConfig));
 app.use(flash());
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
@@ -54,14 +65,12 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-  // const campgrounds = await Campground.find({});
   res.redirect("/campgrounds");
-  // res.render("home", { campgrounds });
-  // res.render("home");
 });
 
-app.use("/campgrounds", campgrounds);
-app.use("/campgrounds/:id/reviews", reviews);
+app.use('/', userRoutes);
+app.use("/campgrounds", campgroundRoutes);
+app.use("/campgrounds/:id/reviews", reviewRoutes);
 
 app.all("*", (req, res, next) => {
   next(new ExpressError("Page Not Found", 404));
