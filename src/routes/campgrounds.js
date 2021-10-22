@@ -69,6 +69,7 @@ router.post(
 // Edit campground
 router.put(
   "/:id",
+  isLoggedIn,
   validateCampground,
   tryAsync(async (req, res) => {
     let data = req.body.campground;
@@ -112,6 +113,7 @@ router.put(
 // Delete campground
 router.delete(
   "/:id",
+  isLoggedIn,
   tryAsync(async (req, res) => {
     const { id } = req.params;
     await Campground.findByIdAndRemove(id);
@@ -138,6 +140,7 @@ router.get(
 // Renders campground edit
 router.get(
   "/:id/edit",
+  isLoggedIn,
   tryAsync(async (req, res) => {
     const { id } = req.params;
     const campground = await Campground.findById(id);

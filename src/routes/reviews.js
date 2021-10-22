@@ -5,6 +5,7 @@ const Campground = require("../models/campgrounds");
 const ExpressError = require("../utils/ExpressError");
 const { tryAsync } = require("../utils/tryAsync");
 const { reviewSchema } = require("../schemas");
+const { isLoggedIn } = require("../middleware");
 
 const validateReview = (req, res, next) => {
   const { error } = reviewSchema.validate(req.body);
@@ -19,6 +20,7 @@ const validateReview = (req, res, next) => {
 // Route for review submission
 router.post(
   "/",
+  isLoggedIn,
   validateReview,
   tryAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id);
@@ -34,6 +36,7 @@ router.post(
 // Route to delete review
 router.delete(
   "/:reviewId",
+  isLoggedIn,
   tryAsync(async (req, res) => {
     const { id, reviewId } = req.params;
     await Campground.findByIdAndUpdate(id, { $pull: { review: reviewId } });
