@@ -1,13 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const passport = require('passport')
+const passport = require("passport");
 const { tryAsync } = require("../utils/tryAsync");
 const User = require("../models/user");
 
+// Renders New User form
 router.get("/register", (req, res) => {
   res.render("users/register");
 });
 
+// Registers a new user
 router.post(
   "/register",
   tryAsync(async (req, res) => {
@@ -24,13 +26,22 @@ router.post(
   })
 );
 
-router.get('/login', (req,res) => {
+// Renders login page
+router.get("/login", (req, res) => {
   res.render("users/login");
-})
+});
 
-router.post('/login', passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), (req,res) => {
-  req.flash("success", "Welcome to Yelp Camp!");
-  res.redirect("/campgrounds");
-})
+// Attempts to login user
+router.post(
+  "/login",
+  passport.authenticate("local", {
+    failureFlash: true,
+    failureRedirect: "/login",
+  }),
+  (req, res) => {
+    req.flash("success", "Welcome to Yelp Camp!");
+    res.redirect("/campgrounds");
+  }
+);
 
 module.exports = router;

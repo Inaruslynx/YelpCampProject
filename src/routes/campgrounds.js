@@ -5,6 +5,7 @@ const { getData } = require("../utils/unsplash");
 const ExpressError = require("../utils/ExpressError");
 const { tryAsync } = require("../utils/tryAsync");
 const { campgroundSchema } = require("../schemas");
+const { isLoggedIn } = require("../middleware");
 
 const validateCampground = (req, res, next) => {
   const { error } = campgroundSchema.validate(req.body);
@@ -16,6 +17,7 @@ const validateCampground = (req, res, next) => {
   }
 };
 
+// Home page
 router.get(
   "/",
   tryAsync(async (req, res) => {
@@ -24,12 +26,15 @@ router.get(
   })
 );
 
-router.get("/new", (req, res) => {
+// Returns form for new campground
+router.get("/new", isLoggedIn, (req, res) => {
   res.render("campgrounds/new");
 });
 
+// Submits new campground
 router.post(
   "/",
+  isLoggedIn,
   validateCampground,
   tryAsync(async (req, res) => {
     let params = req.body.campground;
@@ -47,8 +52,8 @@ router.post(
           full: photo.urls.full,
           regular: photo.urls.regular,
           small: photo.urls.small,
-          thumb: photo.urls.thumb
-        }
+          thumb: photo.urls.thumb,
+        },
       };
       const campground = new Campground(params);
       await campground.save();
@@ -61,6 +66,7 @@ router.post(
   })
 );
 
+// Edit campground
 router.put(
   "/:id",
   validateCampground,
@@ -72,7 +78,7 @@ router.put(
       delete data.image;
       await Campground.findByIdAndUpdate(id, data, {
         new: true,
-        runValidators: true
+        runValidators: true,
       });
     } else {
       let url = data.image.split("/");
@@ -89,12 +95,12 @@ router.put(
             full: photo.urls.full,
             regular: photo.urls.regular,
             small: photo.urls.small,
-            thumb: photo.urls.thumb
-          }
+            thumb: photo.urls.thumb,
+          },
         };
         await Campground.findByIdAndUpdate(id, data, {
           new: true,
-          runValidators: true
+          runValidators: true,
         });
       }
     }
@@ -103,6 +109,7 @@ router.put(
   })
 );
 
+// Delete campground
 router.delete(
   "/:id",
   tryAsync(async (req, res) => {
@@ -113,6 +120,7 @@ router.delete(
   })
 );
 
+// Show a specific campground
 router.get(
   "/:id",
   tryAsync(async (req, res) => {
@@ -127,6 +135,7 @@ router.get(
   })
 );
 
+// Renders campground edit
 router.get(
   "/:id/edit",
   tryAsync(async (req, res) => {

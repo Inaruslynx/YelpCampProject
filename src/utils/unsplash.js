@@ -1,3 +1,5 @@
+// Code I developed to work with Unsplash API and a very specific collection of photos
+
 const nodeFetch = require("node-fetch");
 const { createApi } = require("unsplash-js");
 
@@ -5,6 +7,7 @@ const unsplash = createApi({
   accessKey: process.env.UNSPLASH_ACCESS,
   fetch: nodeFetch
 });
+// This is the collection used to get campground photos
 const collection = "483251";
 
 // Code to get random photo with conditions (collectionID and number of photos):
@@ -16,6 +19,8 @@ exports.getCampPhoto = async (num) => {
   });
 };
 
+// Gets a specific photo from unsplash
+// Doesn't matter what collection
 exports.getData = async (photoId) => {
   return await unsplash.photos.get({ photoId });
 };

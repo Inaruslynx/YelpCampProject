@@ -1,12 +1,18 @@
+// Used to seed initial fake data into mongoDB
+
 // const mongoose = require("mongoose");
 const Campground = require("../models/campgrounds");
 const Cities = require("./cities");
 const { descriptors, places } = require("./helper");
 const { getCampPhoto } = require("../utils/unsplash");
 
+// Don't change below (required by unsplash)
 const maxResults = 30;
+
+// This can be changed for how many entries are desired
 let numberOfCamps = 50;
 
+// Uses unsplash to add photos and make up data for mongoDB and submits
 function mySave(photo) {
   const random1000 = Math.floor(Math.random() * 1000);
   const price = Math.floor(Math.random() * 20 + 10);
@@ -34,6 +40,7 @@ function mySave(photo) {
   camp.save();
 }
 
+// Executes save
 exports.seed = async () => {
   await Campground.deleteMany({});
   do {
