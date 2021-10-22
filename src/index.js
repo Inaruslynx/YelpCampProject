@@ -65,6 +65,7 @@ passport.deserializeUser(User.deserializeUser());
 
 // If there is a success or error message in res, add to req flash message
 app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   next();
@@ -76,7 +77,7 @@ app.get("/", (req, res) => {
 });
 
 // Tell Express to use routes
-app.use('/', userRoutes);
+app.use("/", userRoutes);
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/reviews", reviewRoutes);
 
