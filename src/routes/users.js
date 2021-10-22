@@ -17,6 +17,9 @@ router.post(
       const { username, password, email } = req.body;
       const user = new User({ username, email });
       const registedUser = await User.register(user, password);
+      req.login(registedUser, (err) => {
+        if (err) return next(err);
+      });
       req.flash("success", "Welcome to Yelp Camp!");
       res.redirect("/campgrounds");
     } catch (e) {
@@ -44,6 +47,7 @@ router.post(
   }
 );
 
+// Logout user
 router.get("/logout", (req, res) => {
   req.logout();
   req.flash("success", "Goodbye!");
