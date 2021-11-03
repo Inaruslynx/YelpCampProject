@@ -30,12 +30,13 @@ function mySave(photo) {
         full: photo.urls.full,
         regular: photo.urls.regular,
         small: photo.urls.small,
-        thumb: photo.urls.thumb
-      }
+        thumb: photo.urls.thumb,
+      },
     },
     description:
       "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sequi eius suscipit sit ipsa corporis, recusandae error. Obcaecati id quae magni facere animi, necessitatibus debitis! Quidem dolor quibusdam ex inventore ad?",
-    price
+    price,
+    author: "616d5ebbafac7e1e52d1aa70"
   });
   camp.save();
 }
