@@ -5,7 +5,7 @@ const { getData } = require("../utils/unsplash");
 const ExpressError = require("../utils/ExpressError");
 const { tryAsync } = require("../utils/tryAsync");
 const { campgroundSchema } = require("../schemas");
-const { isLoggedIn } = require("../middleware");
+const { isLoggedIn, isAuthor } = require("../middleware");
 
 const validateCampground = (req, res, next) => {
   const { error } = campgroundSchema.validate(req.body);
@@ -71,6 +71,7 @@ router.post(
 router.put(
   "/:id",
   isLoggedIn,
+  isAuthor,
   validateCampground,
   tryAsync(async (req, res) => {
     let data = req.body.campground;
@@ -115,6 +116,7 @@ router.put(
 router.delete(
   "/:id",
   isLoggedIn,
+  isAuthor,
   tryAsync(async (req, res) => {
     const { id } = req.params;
     await Campground.findByIdAndRemove(id);
@@ -142,6 +144,7 @@ router.get(
 router.get(
   "/:id/edit",
   isLoggedIn,
+  isAuthor,
   tryAsync(async (req, res) => {
     const { id } = req.params;
     const campground = await Campground.findById(id);
