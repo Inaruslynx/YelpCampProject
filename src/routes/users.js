@@ -4,6 +4,7 @@ const passport = require("passport");
 const { tryAsync } = require("../utils/tryAsync");
 const users = require("../controllers/users");
 
+// Handles all routes to /register
 router
   .route("/register")
   // Renders New User form
@@ -11,6 +12,7 @@ router
   // Registers a new user
   .post(tryAsync(users.createUser));
 
+// Handles all routes to /login
 router
   .route("/login")
   // Renders login page
