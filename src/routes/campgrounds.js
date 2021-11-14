@@ -5,40 +5,35 @@ const campground = require("../controllers/campgrounds");
 const { getData } = require("../utils/unsplash");
 const { tryAsync } = require("../utils/tryAsync");
 const { isLoggedIn, isAuthor, validateCampground } = require("../middleware");
+const { route } = require("./users");
 
-// Home page
-router.get("/", tryAsync(campground.index));
+router
+  .route("/")
+  // Home page
+  .get(tryAsync(campground.index))
+  // Submits new campground
+  .post(
+    isLoggedIn,
+    validateCampground,
+    tryAsync(campground.submitNewCampground)
+  );
 
 // Returns form for new campground
 router.get("/new", isLoggedIn, campground.newCampground);
 
-// Submits new campground
-router.post(
-  "/",
-  isLoggedIn,
-  validateCampground,
-  tryAsync(campground.submitNewCampground)
-);
-
-// Edit campground
-router.put(
-  "/:id",
-  isLoggedIn,
-  isAuthor,
-  validateCampground,
-  tryAsync(campground.submitEditCampground)
-);
-
-// Delete campground
-router.delete(
-  "/:id",
-  isLoggedIn,
-  isAuthor,
-  tryAsync(campground.deleteCampground)
-);
-
-// Show a specific campground
-router.get("/:id", tryAsync(campground.showCampground));
+router
+  .route("/:id")
+  // Edit campground
+  .put(
+    isLoggedIn,
+    isAuthor,
+    validateCampground,
+    tryAsync(campground.submitEditCampground)
+  )
+  // Delete campground
+  .delete(isLoggedIn, isAuthor, tryAsync(campground.deleteCampground))
+  // Show a specific campground
+  .get(tryAsync(campground.showCampground));
 
 // Renders campground edit
 router.get(
