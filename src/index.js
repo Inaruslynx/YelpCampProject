@@ -10,9 +10,9 @@ const ExpressError = require("./utils/ExpressError");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user");
-const {tryAsync } = require("./utils/tryAsync")
+// const {tryAsync } = require("./utils/tryAsync")
 // const { seed } = require("./seed/seed");
-const {addAuthor} = require("./utils/addAuthor")
+// const {addAuthor} = require("./utils/addAuthor")
 
 const campgroundRoutes = require("./routes/campgrounds");
 const reviewRoutes = require("./routes/reviews");
@@ -29,7 +29,7 @@ db.once("open", () => {
 });
 
 // seed(); // This will seed a mongoDB with 50 new camps
-tryAsync(addAuthor()); //This will add authors to campgrounds (campgroundID, authorID) I have a defaultID for a test user
+// tryAsync(addAuthor()); //This will add authors to campgrounds (campgroundID, authorID) I have a defaultID for a test user
 
 const app = express();
 
