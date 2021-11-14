@@ -1,5 +1,5 @@
 const Campground = require("../models/campgrounds");
-
+const { getData } = require("../utils/unsplash");
 // Home page
 module.exports.index = async (req, res) => {
   const campgrounds = await Campground.find({});
