@@ -2,30 +2,27 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const { tryAsync } = require("../utils/tryAsync");
-const users = require("../controllers/users")
+const users = require("../controllers/users");
 
+router
+  .route("/register")
+  // Renders New User form
+  .get(users.newUserForm)
+  // Registers a new user
+  .post(tryAsync(users.createUser));
 
-// Renders New User form
-router.get("/register", users.newUserForm);
-
-// Registers a new user
-router.post(
-  "/register",
-  tryAsync(users.createUser)
-);
-
-// Renders login page
-router.get("/login", users.renderLogin);
-
-// Attempts to login user
-router.post(
-  "/login",
-  passport.authenticate("local", {
-    failureFlash: true,
-    failureRedirect: "/login",
-  }),
-  users.loginUser
-);
+router
+  .route("/login")
+  // Renders login page
+  .get(users.renderLogin)
+  // Attempts to login user
+  .post(
+    passport.authenticate("local", {
+      failureFlash: true,
+      failureRedirect: "/login",
+    }),
+    users.loginUser
+  );
 
 // Logout user
 router.get("/logout", users.logoutUser);
