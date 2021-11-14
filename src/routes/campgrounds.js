@@ -2,20 +2,8 @@ const express = require("express");
 const router = express.Router();
 const Campground = require("../models/campgrounds");
 const { getData } = require("../utils/unsplash");
-const ExpressError = require("../utils/ExpressError");
-const { tryAsync } = require("../utils/tryAsync");
-const { campgroundSchema } = require("../schemas");
-const { isLoggedIn, isAuthor } = require("../middleware");
-
-const validateCampground = (req, res, next) => {
-  const { error } = campgroundSchema.validate(req.body);
-  if (error) {
-    const msg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(msg, 400);
-  } else {
-    next();
-  }
-};
+const { tryAsync } = require("../utils/tryAsync")
+const { isLoggedIn, isAuthor, validateCampground } = require("../middleware");
 
 // Home page
 router.get(
