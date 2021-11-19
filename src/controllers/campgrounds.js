@@ -14,6 +14,7 @@ module.exports.newCampground = (req, res) => {
 // Submits new campground
 module.exports.submitNewCampground = async (req, res) => {
   let params = req.body.campground;
+  console.log(params);
   const urlArray = params["image"].split("/");
   const photoId = urlArray[urlArray.length - 1];
   const results = await getData(photoId);
