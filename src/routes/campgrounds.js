@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 const campground = require("../controllers/campgrounds");
 // const Campground = require("../models/campgrounds");
 const { tryAsync } = require("../utils/tryAsync");
@@ -15,6 +17,7 @@ router
   .post(
     isLoggedIn,
     validateCampground,
+    upload.single('file'),
     tryAsync(campground.submitNewCampground)
   );
 

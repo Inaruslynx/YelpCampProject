@@ -12,31 +12,40 @@ module.exports.newCampground = (req, res) => {
 };
 
 // Submits new campground
-// Need to use multer here. Then we can parse the body and any files uploaded
+// Multer is parsing the input and has an object called file
 module.exports.submitNewCampground = async (req, res) => {
   let params = req.body.campground;
-  const urlArray = params["image"].split("/");
-  const photoId = urlArray[urlArray.length - 1];
-  const results = await getData(photoId);
-  if (results.type === "success") {
-    const photo = results.response;
-    params["image"] = {
-      id: photo.id,
-      width: photo.width,
-      height: photo.height,
-      urls: {
-        raw: photo.urls.raw,
-        full: photo.urls.full,
-        regular: photo.urls.regular,
-        small: photo.urls.small,
-        thumb: photo.urls.thumb,
-      },
-    };
-    const campground = new Campground(params);
-    campground.author = req.user._id;
-    await campground.save();
+  let file = req.file;
+  console.log(params, req.file);
+  if (params.image !== "") {
+    console.log("in unsplash logic")
+    const urlArray = params["image"].split("/");
+    const photoId = urlArray[urlArray.length - 1];
+    const results = await getData(photoId);
+    if (results.type === "success") {
+      const photo = results.response;
+      params["image"] = {
+        id: photo.id,
+        width: photo.width,
+        height: photo.height,
+        urls: {
+          raw: photo.urls.raw,
+          full: photo.urls.full,
+          regular: photo.urls.regular,
+          small: photo.urls.small,
+          thumb: photo.urls.thumb,
+        },
+      };
+      const campground = new Campground(params);
+      campground.author = req.user._id;
+      await campground.save();
+      req.flash("success", "Successfully created new campground!");
+      res.redirect(`/campgrounds/${campground._id}`);
+    }
+  } else if (file) {
+    console.log("recieved a file");
     req.flash("success", "Successfully created new campground!");
-    res.redirect(`/campgrounds/${campground._id}`);
+    res.redirect("/campgrounds/")
   } else {
     console.log("Error getting photo data");
     console.log(results);
