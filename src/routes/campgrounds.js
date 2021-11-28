@@ -1,12 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+const {storage, test} = require("../cloudinary")
+const upload = multer({ storage });
 const campground = require("../controllers/campgrounds");
-// const Campground = require("../models/campgrounds");
 const { tryAsync } = require("../utils/tryAsync");
 const { isLoggedIn, isAuthor, validateCampground } = require("../middleware");
-const { route } = require("./users");
 
 // Handles all routes to /
 router
@@ -17,6 +16,7 @@ router
   .post(
     isLoggedIn,
     validateCampground,
+    test,
     upload.single('file'),
     tryAsync(campground.submitNewCampground)
   );

@@ -1,6 +1,7 @@
 const Campground = require("../models/campgrounds");
 const { getData } = require("../utils/unsplash");
-// Home page
+
+// Campground page
 module.exports.index = async (req, res) => {
   const campgrounds = await Campground.find({});
   res.render("campgrounds/index", { campgrounds });
@@ -18,7 +19,7 @@ module.exports.submitNewCampground = async (req, res) => {
   let file = req.file;
   console.log(params, req.file);
   if (params.image !== "") {
-    console.log("in unsplash logic")
+    // console.log("in unsplash logic");
     const urlArray = params["image"].split("/");
     const photoId = urlArray[urlArray.length - 1];
     const results = await getData(photoId);
@@ -45,7 +46,7 @@ module.exports.submitNewCampground = async (req, res) => {
   } else if (file) {
     console.log("recieved a file");
     req.flash("success", "Successfully created new campground!");
-    res.redirect("/campgrounds/")
+    res.redirect("/campgrounds/");
   } else {
     console.log("Error getting photo data");
     console.log(results);

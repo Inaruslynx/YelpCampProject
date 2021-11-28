@@ -10,7 +10,6 @@ const ExpressError = require("./utils/ExpressError");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/users");
-// const {tryAsync } = require("./utils/tryAsync")
 // const { seed } = require("./seed/seed");
 // const {addAuthor} = require("./utils/addAuthor")
 
