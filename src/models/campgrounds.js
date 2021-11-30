@@ -29,6 +29,12 @@ const CampgroundSchema = new Schema({
       thumb: String,
     },
   },
+  cloudinary: [
+    {
+      url: String,
+      filename: String,
+    },
+  ],
 });
 
 // Deletes reviews associated with campground when campground deleted

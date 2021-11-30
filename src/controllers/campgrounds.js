@@ -16,16 +16,16 @@ module.exports.newCampground = (req, res) => {
 // Multer is parsing the input and has an object called file
 module.exports.submitNewCampground = async (req, res) => {
   let params = req.body.campground;
-  let file = req.file;
-  console.log(params, req.file);
+  const campground = new Campground(params);
+  campground.author = req.user._id;
   if (params.image !== "") {
-    // console.log("in unsplash logic");
+    // in unsplash logic
     const urlArray = params["image"].split("/");
     const photoId = urlArray[urlArray.length - 1];
     const results = await getData(photoId);
     if (results.type === "success") {
       const photo = results.response;
-      params["image"] = {
+      campground.image = {
         id: photo.id,
         width: photo.width,
         height: photo.height,
@@ -37,16 +37,15 @@ module.exports.submitNewCampground = async (req, res) => {
           thumb: photo.urls.thumb,
         },
       };
-      const campground = new Campground(params);
-      campground.author = req.user._id;
       await campground.save();
       req.flash("success", "Successfully created new campground!");
       res.redirect(`/campgrounds/${campground._id}`);
     }
-  } else if (file) {
-    console.log("recieved a file");
+  } else if (req.files) {
+    campground.cloudinary = req.files.map(f => ({url: f.path, filename: f.filename}));
+    await campground.save();
     req.flash("success", "Successfully created new campground!");
-    res.redirect("/campgrounds/");
+    res.redirect(`/campgrounds/${campground._id}`);
   } else {
     console.log("Error getting photo data");
     console.log(results);
@@ -104,7 +103,9 @@ module.exports.deleteCampground = async (req, res) => {
 module.exports.showCampground = async (req, res) => {
   const campground = await Campground.findById(req.params.id)
     .populate({ path: "reviews", populate: { path: "author" } }) // Populate reviews and their authors
-    .populate("author"); // Populate author of campground
+    .populate("author") // Populate author of campground
+    .populate("image") // Populate image of campground if it exists
+    .populate("cloudinary"); //Populate cloudinary if it exists
   if (!campground) {
     req.flash("error", "Cannot find that campground!");
     return res.redirect("/campgrounds");

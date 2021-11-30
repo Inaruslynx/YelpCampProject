@@ -19,8 +19,7 @@ let test = (req, res, next) => {
 
 const storage = new CloudinaryStorage({
   cloudinary,
-  folder: "YelpCamp",
-  allowedFormats: ["jpeg", "png", "jpg"],
+  params: { folder: "YelpCamp", allowedFormats: ["jpeg", "png", "jpg"] },
 });
 
 module.exports = {

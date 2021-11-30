@@ -16,8 +16,7 @@ router
   .post(
     isLoggedIn,
     validateCampground,
-    test,
-    upload.single('file'),
+    upload.array('file'),
     tryAsync(campground.submitNewCampground)
   );
 
