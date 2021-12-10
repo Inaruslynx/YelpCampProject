@@ -31,6 +31,7 @@ router
     isLoggedIn,
     isAuthor,
     validateCampground,
+    upload.array('file'),
     tryAsync(campground.submitEditCampground)
   )
   // Delete campground

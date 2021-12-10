@@ -57,6 +57,7 @@ module.exports.submitEditCampground = async (req, res) => {
   let data = req.body.campground;
   const { id } = req.params;
   const camp = await Campground.findById(id);
+  // Split between unsplash and cloudinary
   if (camp.image.urls.raw === data.image) {
     delete data.image;
     await Campground.findByIdAndUpdate(id, data, {
