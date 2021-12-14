@@ -27,7 +27,8 @@
     "unsplash-js": "7.0.15"
   },
   "devDependencies": {
-    "nodemon": "^2.0.14"
+    "nodemon": "^2.0.14",
+    "ejs-lint": "1.1.0"
   },
   "keywords": []
 }

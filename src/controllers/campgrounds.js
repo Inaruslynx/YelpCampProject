@@ -42,7 +42,10 @@ module.exports.submitNewCampground = async (req, res) => {
       res.redirect(`/campgrounds/${campground._id}`);
     }
   } else if (req.files) {
-    campground.cloudinary = req.files.map(f => ({url: f.path, filename: f.filename}));
+    campground.cloudinary = req.files.map((f) => ({
+      url: f.path,
+      filename: f.filename,
+    }));
     await campground.save();
     req.flash("success", "Successfully created new campground!");
     res.redirect(`/campgrounds/${campground._id}`);
