@@ -56,39 +56,54 @@ module.exports.submitNewCampground = async (req, res) => {
 };
 
 // Edit campground
+// Using Multer to parse 'file' and data
 module.exports.submitEditCampground = async (req, res) => {
   let data = req.body.campground;
   const { id } = req.params;
   const camp = await Campground.findById(id);
   // Split between unsplash and cloudinary
-  if (camp.image.urls.raw === data.image) {
+  if ((data.image == "" && !req.files) || camp.image.urls.raw === data.image) {
     delete data.image;
     await Campground.findByIdAndUpdate(id, data, {
       new: true,
       runValidators: true,
     });
   } else {
-    let url = data.image.split("/");
-    const photoId = url[url.length - 1];
-    const results = await getData(photoId);
-    if (results.type === "success") {
-      const photo = results.response;
-      data["image"] = {
-        id: photo.id,
-        width: photo.width,
-        height: photo.height,
-        urls: {
-          raw: photo.urls.raw,
-          full: photo.urls.full,
-          regular: photo.urls.regular,
-          small: photo.urls.small,
-          thumb: photo.urls.thumb,
-        },
-      };
+    if (data.image != "") {
+      let url = data.image.split("/");
+      const photoId = url[url.length - 1];
+      const results = await getData(photoId);
+      if (results.type === "success") {
+        const photo = results.response;
+        data["image"] = {
+          id: photo.id,
+          width: photo.width,
+          height: photo.height,
+          urls: {
+            raw: photo.urls.raw,
+            full: photo.urls.full,
+            regular: photo.urls.regular,
+            small: photo.urls.small,
+            thumb: photo.urls.thumb,
+          },
+        };
+        await Campground.findByIdAndUpdate(id, data, {
+          new: true,
+          runValidators: true,
+        });
+      }
+    } else if (req.files) {
+      data.cloudinary = req.files.map((f) => ({
+        url: f.path,
+        filename: f.filename,
+      }));
       await Campground.findByIdAndUpdate(id, data, {
         new: true,
         runValidators: true,
       });
+    } else {
+      req.flash("error", "Couldn't make a change to the campground");
+      res.redirect(`/campgrounds/${id}`);
     }
   }
   req.flash("success", "Successfully updated campground!");
