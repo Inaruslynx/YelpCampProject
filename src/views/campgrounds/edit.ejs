@@ -86,8 +86,12 @@
         <div class="valid-feedback">Correct</div>
       </div>
       <div class="mb-3">
-        <!-- TODO: Need to delete original image system -->
+        <!-- TODO: Delete MongoDB reference to unsplash photo -->
         <% if (campground.image.urls.regular !== undefined) {%>
+        <label for="unsplash">Delete?</label>
+            <div class="form-check-inline">
+              <input type="checkbox" id="unsplash" name="deleteImages[]" value="<%=campground.image.id%>">
+            </div>
           <img
         src="<%= campground.image.urls.regular %>"
         class="card-img-top rounded"
