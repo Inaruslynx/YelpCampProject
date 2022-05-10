@@ -110,10 +110,14 @@ module.exports.submitEditCampground = async (req, res) => {
       }
       if (req.body.deleteImages) {
         // This deletes all images. Not just the ones selected
-        await camp.updateOne({
+        // I don't think it's looking correctly at filenames.
+        const res = await camp.updateOne({
           $pull: { cloudinary: { filename: { $in: req.body.deleteImages } } },
         });
-        console.log(camp);
+        console.log(res.matchedCount)
+        console.log(res.modifiedCount);
+        console.log(res.acknowledged);
+        console.log(res.upsertedId);
       }
     } catch (e) {
       req.flash("error", "Couldn't make a change to the campground");
