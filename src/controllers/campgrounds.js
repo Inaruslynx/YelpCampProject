@@ -111,13 +111,22 @@ module.exports.submitEditCampground = async (req, res) => {
       if (req.body.deleteImages) {
         // This deletes all images. Not just the ones selected
         // I don't think it's looking correctly at filenames.
-        const res = await camp.updateOne({
-          $pull: { cloudinary: { filename: { $in: req.body.deleteImages } } },
+        // I can go through the mongoose 'document' and just delete if found in deleteImages
+        camp.cloudinary.forEach(element => {
+          // find expects a function
+          if (req.body.deleteImages.find(element.filename)){
+            console.log("Found " + element.filename + " and now deleting");
+            element.delete();
+          }
         });
-        console.log(res.matchedCount)
-        console.log(res.modifiedCount);
-        console.log(res.acknowledged);
-        console.log(res.upsertedId);
+        camp.save();
+        // const res = await camp.updateOne({
+        //   $pull: { cloudinary: { filename: { $in: req.body.deleteImages } } },
+        // });
+        // console.log(res.matchedCount)
+        // console.log(res.modifiedCount);
+        // console.log(res.acknowledged);
+        // console.log(res.upsertedId);
       }
     } catch (e) {
       req.flash("error", "Couldn't make a change to the campground");
