@@ -1,5 +1,6 @@
 const Campground = require("../models/campgrounds");
 const { getData } = require("../utils/unsplash");
+const { cloudinary} = require("../cloudinary")
 
 // Campground page
 module.exports.index = async (req, res) => {
@@ -98,7 +99,8 @@ module.exports.submitEditCampground = async (req, res) => {
           });
         }
       }
-      if (req.files) {
+      // req.files is always true. You must check length greater than 0
+      if (req.files.length > 0) {
         data.cloudinary = req.files.map((f) => ({
           url: f.path,
           filename: f.filename,
@@ -108,25 +110,34 @@ module.exports.submitEditCampground = async (req, res) => {
           runValidators: true,
         });
       }
+      await camp.save();
       if (req.body.deleteImages) {
-        // This deletes all images. Not just the ones selected
-        // I don't think it's looking correctly at filenames.
-        // I can go through the mongoose 'document' and just delete if found in deleteImages
-        camp.cloudinary.forEach(element => {
-          // find expects a function
-          if (req.body.deleteImages.find(element.filename)){
-            console.log("Found " + element.filename + " and now deleting");
-            element.delete();
+        for(let filename of req.body.deleteImages){
+          await cloudinary.uploader.destroy(filename);
+        }
+        const res = await camp.updateOne(
+          // { cloudinary: { filename: { $in: req.body.deleteImages } } },
+          {
+            $pull: { cloudinary: { filename: { $in: req.body.deleteImages } } },
           }
-        });
-        camp.save();
-        // const res = await camp.updateOne({
-        //   $pull: { cloudinary: { filename: { $in: req.body.deleteImages } } },
-        // });
+        );
+        console.log(camp);
+        console.log(res);
         // console.log(res.matchedCount)
         // console.log(res.modifiedCount);
         // console.log(res.acknowledged);
         // console.log(res.upsertedId);
+        // This deletes all images. Not just the ones selected
+        // I don't think it's looking correctly at filenames.
+        // I can go through the mongoose 'document' and just delete if found in deleteImages
+        // camp.cloudinary.forEach(element => {
+        //   // find expects a function
+        //   console.log(element)
+        //   if (req.body.deleteImages.find(photo => photo === element.filename)){
+        //     console.log("Found " + element.filename + " and now deleting");
+        //     element.delete();
+        //   }
+        // });
       }
     } catch (e) {
       req.flash("error", "Couldn't make a change to the campground");
