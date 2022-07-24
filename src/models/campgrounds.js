@@ -2,6 +2,15 @@ const mongoose = require("mongoose");
 const Review = require("./reviews");
 const Schema = mongoose.Schema;
 
+const CloudinarySchema = new Schema({
+  url: String,
+  filename: String,
+});
+
+CloudinarySchema.virtual("thumbnail").get(function () {
+  return this.url.replace("/upload", "/upload/w_200");
+});
+
 const CampgroundSchema = new Schema({
   title: String,
   price: Number,
@@ -29,12 +38,7 @@ const CampgroundSchema = new Schema({
       thumb: String,
     },
   },
-  cloudinary: [
-    {
-      url: String,
-      filename: String,
-    },
-  ],
+  cloudinary: [CloudinarySchema],
 });
 
 // Deletes reviews associated with campground when campground deleted

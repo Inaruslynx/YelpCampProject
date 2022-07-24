@@ -89,24 +89,36 @@
         <!-- TODO: Delete MongoDB reference to unsplash photo -->
         <% if (campground.image.urls.regular !== undefined) {%>
         <label for="unsplash">Delete?</label>
-            <div class="form-check-inline">
-              <input type="checkbox" id="unsplash" name="deleteImages[]" value="<%=campground.image.id%>">
-            </div>
-          <img
-        src="<%= campground.image.urls.regular %>"
-        class="card-img-top rounded"
-        alt="Image"
-      />
-        <% } %>
-        <% if (campground.cloudinary) {%> 
-          <% campground.cloudinary.forEach(function(img, i) { %> 
-            <label for="image-<%= i %>">Delete?</label>
-            <div class="form-check-inline">
-              <input type="checkbox" id="image-<%= i %>" name="deleteImages[]" value="<%=img.filename%>">
-            </div>
-            <img src="<%= img.url %>" class="img-thumbnail" alt="Image">
-          <% }) %> 
-        <% } %> 
+        <div class="form-check-inline">
+          <input
+            type="checkbox"
+            id="unsplash"
+            name="deleteImages[]"
+            value="<%=campground.image.id%>"
+          />
+        </div>
+        <img
+          src="<%= campground.image.urls.regular %>"
+          class="card-img-top rounded"
+          alt="Image"
+        />
+        <% } %> <% if (campground.cloudinary) {%> <%
+        campground.cloudinary.forEach(function(img, i) { %>
+        <label for="image-<%= i %>">Delete?</label>
+        <div class="form-check-inline">
+          <input
+            type="checkbox"
+            id="image-<%= i %>"
+            name="deleteImages[]"
+            value="<%=img.filename%>"
+          />
+        </div>
+        <img
+          src="<%= img.thumbnail//url %>"
+          class="img-thumbnail"
+          alt="Image"
+        />
+        <% }) %> <% } %>
       </div>
       <button class="btn mb-3 btn-info">Save Campground</button>
     </form>
