@@ -11,10 +11,25 @@ CloudinarySchema.virtual("thumbnail").get(function () {
   return this.url.replace("/upload", "/upload/w_200");
 });
 
+const GeometrySchema = new Schema({
+  type: {
+    type: String,
+    enum: ["Point"],
+    required: true,
+  },
+  coordinates: {
+    type: [Number],
+    required: true,
+  },
+  _id: false,
+  autoindex: false,
+});
+
 const CampgroundSchema = new Schema({
   title: String,
   price: Number,
   description: String,
+  geometry: GeometrySchema,
   location: String,
   author: {
     type: Schema.Types.ObjectId,

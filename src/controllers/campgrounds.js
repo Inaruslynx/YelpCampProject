@@ -1,7 +1,8 @@
 const Campground = require("../models/campgrounds");
 const { getData } = require("../utils/unsplash");
-const { cloudinary} = require("../cloudinary");
-const mbxGeocoding = re
+const { cloudinary } = require("../cloudinary");
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
+const geocoder = mbxGeocoding({ accessToken: process.env.MAPBOX_TOKEN });
 
 // Campground page
 module.exports.index = async (req, res) => {
@@ -17,7 +18,14 @@ module.exports.newCampground = (req, res) => {
 // Submits new campground
 // Multer is parsing the input and has an object called file
 module.exports.submitNewCampground = async (req, res) => {
+  const geoData = await geocoder
+    .forwardGeocode({
+      query: req.body.campground.location,
+      limit: 1,
+    })
+    .send();
   let params = req.body.campground;
+  params.geometry = geoData.body.features[0].geometry;
   const campground = new Campground(params);
   campground.author = req.user._id;
   if (params.image !== "") {
@@ -49,6 +57,7 @@ module.exports.submitNewCampground = async (req, res) => {
       filename: f.filename,
     }));
     await campground.save();
+    console.log(campground);
     req.flash("success", "Successfully created new campground!");
     res.redirect(`/campgrounds/${campground._id}`);
   } else {
@@ -113,7 +122,7 @@ module.exports.submitEditCampground = async (req, res) => {
       }
       await camp.save();
       if (req.body.deleteImages) {
-        for(let filename of req.body.deleteImages){
+        for (let filename of req.body.deleteImages) {
           await cloudinary.uploader.destroy(filename);
         }
         const res = await camp.updateOne(
