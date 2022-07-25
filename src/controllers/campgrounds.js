@@ -1,6 +1,7 @@
 const Campground = require("../models/campgrounds");
 const { getData } = require("../utils/unsplash");
-const { cloudinary} = require("../cloudinary")
+const { cloudinary} = require("../cloudinary");
+const mbxGeocoding = re
 
 // Campground page
 module.exports.index = async (req, res) => {

@@ -7,6 +7,7 @@
     "start": "nodemon src/index.js"
   },
   "dependencies": {
+    "@mapbox/mapbox-sdk": "^0.13.4",
     "bcrypt": "5.0.1",
     "cloudinary": "^1.27.1",
     "connect-flash": "0.1.1",
@@ -27,8 +28,8 @@
     "unsplash-js": "7.0.15"
   },
   "devDependencies": {
-    "nodemon": "^2.0.14",
-    "ejs-lint": "1.1.0"
+    "ejs-lint": "1.1.0",
+    "nodemon": "^2.0.14"
   },
   "keywords": []
 }
