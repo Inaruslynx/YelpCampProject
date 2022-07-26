@@ -17,6 +17,8 @@ module.exports.newCampground = (req, res) => {
 
 // Submits new campground
 // Multer is parsing the input and has an object called file
+// Added Geocode so now it will automatically find the location
+// and save it to MongoDB
 module.exports.submitNewCampground = async (req, res) => {
   const geoData = await geocoder
     .forwardGeocode({
@@ -57,7 +59,6 @@ module.exports.submitNewCampground = async (req, res) => {
       filename: f.filename,
     }));
     await campground.save();
-    console.log(campground);
     req.flash("success", "Successfully created new campground!");
     res.redirect(`/campgrounds/${campground._id}`);
   } else {
