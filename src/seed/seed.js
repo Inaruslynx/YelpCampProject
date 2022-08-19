@@ -1,4 +1,6 @@
 // Used to seed initial fake data into mongoDB
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
+const geocoder = mbxGeocoding({ accessToken: process.env.MAPBOX_TOKEN });
 
 // const mongoose = require("mongoose");
 const Campground = require("../models/campgrounds");
@@ -13,14 +15,20 @@ const maxResults = 30;
 let numberOfCamps = 50;
 
 // Uses unsplash to add photos and make up data for mongoDB and submits
-function mySave(photo) {
+async function mySave(photo) {
   const random1000 = Math.floor(Math.random() * 1000);
   const price = Math.floor(Math.random() * 20 + 10);
+  const location = `${Cities[random1000].city}, ${Cities[random1000].state}`;
+  const geoData = await geocoder.forwardGeocode({
+    query: location,
+    limit: 1
+  }).send();
   const camp = new Campground({
     title: `${descriptors[Math.floor(Math.random() * descriptors.length)]} ${
       places[Math.floor(Math.random() * places.length)]
     }`,
-    location: `${Cities[random1000].city}, ${Cities[random1000].state}`,
+    location: location,
+    geometry: geoData.body.features[0].geometry,
     image: {
       id: photo.id,
       width: photo.width,
