@@ -73,7 +73,6 @@ app.use((req, res, next) => {
   res.locals.error = req.flash("error");
   next();
 });
-
 // Right now there is no / so redirect to campground
 app.get("/", (req, res) => {
   res.redirect("/campgrounds");

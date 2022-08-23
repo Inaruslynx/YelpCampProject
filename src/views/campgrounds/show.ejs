@@ -183,6 +183,7 @@
 
 <script>
   const mapToken = "<%-process.env.MAPBOX_TOKEN%>";
-  const geometry = <%- JSON.stringify(campground.geometry) %>;
+  // stringify will put "" around data
+  const campground = <%-JSON.stringify(campground)%>;
 </script>
 <script src="/js/showPageMap.js"></script>
