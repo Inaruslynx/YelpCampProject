@@ -19,16 +19,22 @@ async function mySave(photo) {
   const random1000 = Math.floor(Math.random() * 1000);
   const price = Math.floor(Math.random() * 20 + 10);
   const location = `${Cities[random1000].city}, ${Cities[random1000].state}`;
-  const geoData = await geocoder.forwardGeocode({
-    query: location,
-    limit: 1
-  }).send();
+  // const geoData = await geocoder
+  //   .forwardGeocode({
+  //     query: location,
+  //     limit: 1,
+  //   })
+  //   .send();
   const camp = new Campground({
     title: `${descriptors[Math.floor(Math.random() * descriptors.length)]} ${
       places[Math.floor(Math.random() * places.length)]
     }`,
     location: location,
-    geometry: geoData.body.features[0].geometry,
+    geometry: {
+      type: "Point",
+      coordinates: [Cities[random1000].longitude, Cities[random1000].latitude],
+    },
+    // geometry: geoData.body.features[0].geometry,
     image: {
       id: photo.id,
       width: photo.width,
@@ -44,7 +50,7 @@ async function mySave(photo) {
     description:
       "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sequi eius suscipit sit ipsa corporis, recusandae error. Obcaecati id quae magni facere animi, necessitatibus debitis! Quidem dolor quibusdam ex inventore ad?",
     price,
-    author: "616d5ebbafac7e1e52d1aa70"
+    author: "616d5ebbafac7e1e52d1aa70",
   });
   camp.save();
 }
