@@ -12,7 +12,7 @@ const { getCampPhoto } = require("../utils/unsplash");
 const maxResults = 30;
 
 // This can be changed for how many entries are desired
-let numberOfCamps = 50;
+let numberOfCamps = 300;
 
 // Uses unsplash to add photos and make up data for mongoDB and submits
 async function mySave(photo) {

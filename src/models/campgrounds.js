@@ -25,6 +25,8 @@ const GeometrySchema = new Schema({
   autoindex: false,
 });
 
+const opts = { toJSON: { virtuals: true } };
+
 const CampgroundSchema = new Schema({
   title: String,
   price: Number,
@@ -54,7 +56,11 @@ const CampgroundSchema = new Schema({
     },
   },
   cloudinary: [CloudinarySchema],
-});
+}, opts);
+
+CampgroundSchema.virtual("properties.popUpMarkup").get(function () {
+  return `<strong><a href="/campgrounds/${this._id}">${this.title}</a>`;
+})
 
 // Deletes reviews associated with campground when campground deleted
 CampgroundSchema.post("findOneAndRemove", async (camp) => {
