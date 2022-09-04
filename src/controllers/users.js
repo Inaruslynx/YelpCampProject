@@ -2,6 +2,11 @@ const Campground = require("../models/campgrounds");
 const Review = require("../models/reviews");
 const User = require("../models/users");
 
+// Renders Home Page
+// module.exports.homePage = (req, res) => {
+//   res.render('/home');
+// }
+
 // Renders New User form
 module.exports.newUserForm = async (req, res) => {
   const { id, reviewId } = req.params;

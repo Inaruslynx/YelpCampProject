@@ -73,15 +73,16 @@ app.use((req, res, next) => {
   res.locals.error = req.flash("error");
   next();
 });
-// Right now there is no / so redirect to campground
-app.get("/", (req, res) => {
-  res.redirect("/campgrounds");
-});
 
 // Tell Express to use routes
 app.use("/", userRoutes);
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/reviews", reviewRoutes);
+
+// Right now there is no / so redirect to campground
+app.get("/", (req, res) => {
+  res.render("home");
+});
 
 // If route wasn't found above then return an error
 app.all("*", (req, res, next) => {

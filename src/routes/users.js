@@ -4,6 +4,12 @@ const passport = require("passport");
 const { tryAsync } = require("../utils/tryAsync");
 const users = require("../controllers/users");
 
+// Need to handle home requess /
+// router
+//   .route("/")
+//   // Render homepage on get request
+//   .get(users.homePage);
+
 // Handles all routes to /register
 router
   .route("/register")
