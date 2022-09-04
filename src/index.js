@@ -79,7 +79,7 @@ app.use("/", userRoutes);
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/reviews", reviewRoutes);
 
-// Right now there is no / so redirect to campground
+// Go to home
 app.get("/", (req, res) => {
   res.render("home");
 });
