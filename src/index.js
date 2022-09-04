@@ -92,7 +92,7 @@ app.all("*", (req, res, next) => {
 // If server has a problem (not an invalid route) then return an error
 app.use((err, req, res, next) => {
   const { statusCode = 500 } = err;
-  if (!err.message) err.message = "Somethign went wrong!";
+  if (!err.message) err.message = "Something went wrong!";
   res.status(statusCode).render("error", { err });
 });
 
