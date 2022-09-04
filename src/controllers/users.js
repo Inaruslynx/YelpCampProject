@@ -9,11 +9,8 @@ const User = require("../models/users");
 
 // Renders New User form
 module.exports.newUserForm = async (req, res) => {
-  const { id, reviewId } = req.params;
-  await Campground.findByIdAndUpdate(id, { $pull: { review: reviewId } });
-  await Review.findByIdAndDelete(reviewId);
-  req.flash("success", "Deleted review!");
-  res.redirect(`/campgrounds/${id}`);
+  res.render('users/register');
+  
 };
 
 // Registers a new user
