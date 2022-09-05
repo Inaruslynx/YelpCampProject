@@ -4,7 +4,7 @@
   "use strict";
 
   // This is for bs-custom-file-input so bootstrap can display the name of files
-  bsCustomFileInput.init()
+  // bsCustomFileInput.init()
 
   // Fetch all the forms we want to apply custom Bootstrap validation styles to
   var forms = document.querySelectorAll(".needs-validation");
