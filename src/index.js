@@ -9,6 +9,7 @@ const morgan = require("morgan");
 const ExpressError = require("./utils/ExpressError");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+const mongoSanitize = require('express-mongo-sanitize');
 const User = require("./models/users");
 // const { seed } = require("./seed/seed");
 // const {addAuthor} = require("./utils/addAuthor")
@@ -41,6 +42,7 @@ app.use(methodOverride("_method"));
 // Remove below when no longer developing
 app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname + "/public"))); // __dirname is very important
+app.use(mongoSanitize())
 
 // Settings for Session cookies
 const sessionConfig = {
