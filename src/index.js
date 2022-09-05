@@ -46,6 +46,7 @@ app.use(mongoSanitize())
 
 // Settings for Session cookies
 const sessionConfig = {
+  name: 'Yelpcamp user',
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
@@ -54,6 +55,7 @@ const sessionConfig = {
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
     maxAge: 1000 * 60 * 60 * 24 * 7,
     httpOnly: true,
+    // secure: true,
   },
 };
 app.use(session(sessionConfig));
