@@ -1611,6 +1611,11 @@
   dependencies:
     "function-bind" "^1.1.1"
 
+"helmet@^6.0.0":
+  "integrity" "sha512-FO9RpR1wNJepH/GbLPQVtkE2eESglXL641p7SdyoT4LngHFJcZheHMoyUcjCZF4qpuMMO1u5q6RK0l9Ux8JBcg=="
+  "resolved" "https://registry.npmjs.org/helmet/-/helmet-6.0.0.tgz"
+  "version" "6.0.0"
+
 "hosted-git-info@^2.1.4":
   "integrity" "sha512-mxIDAb9Lsm6DoOJ7xH+5+X4y1LU/4Hi50L9C5sIswK3JzULS4bwk1FvjdBgvYR4bzT4tuUQiC15FE2f5HbLvYw=="
   "resolved" "https://registry.npmjs.org/hosted-git-info/-/hosted-git-info-2.8.9.tgz"

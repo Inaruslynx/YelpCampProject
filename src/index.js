@@ -9,7 +9,8 @@ const morgan = require("morgan");
 const ExpressError = require("./utils/ExpressError");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
-const mongoSanitize = require('express-mongo-sanitize');
+const mongoSanitize = require("express-mongo-sanitize");
+const helmet = require("helmet");
 const User = require("./models/users");
 // const { seed } = require("./seed/seed");
 // const {addAuthor} = require("./utils/addAuthor")
@@ -42,11 +43,12 @@ app.use(methodOverride("_method"));
 // Remove below when no longer developing
 app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname + "/public"))); // __dirname is very important
-app.use(mongoSanitize())
+app.use(mongoSanitize());
+// app.use(helmet({ contentSecurityPolicy: false, crossOriginResourcePolicy: false}));
 
 // Settings for Session cookies
 const sessionConfig = {
-  name: 'Yelpcamp user',
+  name: "Yelpcamp user",
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
