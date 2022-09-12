@@ -43,7 +43,7 @@ app.set("views", path.join(__dirname, "/views")); // __dirname is very important
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 // Remove below when no longer developing
-// app.use(morgan("dev"));
+app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname + "/public"))); // __dirname is very important
 app.use(mongoSanitize());
 
