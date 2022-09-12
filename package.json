@@ -1,5 +1,5 @@
 {
-  "name": "YelpCamp",
+  "name": "yelpcamp",
   "version": "1.0.0",
   "description": "YelpCamp is a learning project based on the Udemy Course - The Web Developer Bootcamp 2022",
   "main": "src/index.js",
