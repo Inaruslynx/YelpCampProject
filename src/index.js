@@ -6,15 +6,12 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const methodOverride = require("method-override");
-if (process.env.NODE_ENV !== "production") {
-  const morgan = require("morgan");
-}
 const ExpressError = require("./utils/ExpressError");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const mongoSanitize = require("express-mongo-sanitize");
 // const helmet = require("helmet");
-const {helmetSettings} = require("./utils/helmet");
+const { helmetSettings } = require("./utils/helmet");
 const User = require("./models/users");
 // const { seed } = require("./seed/seed");
 // const {addAuthor} = require("./utils/addAuthor")
@@ -46,26 +43,25 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 // Remove below when no longer developing
 if (process.env.NODE_ENV !== "production") {
+  const morgan = require("morgan");
   app.use(morgan("dev"));
 }
 app.use(express.static(path.join(__dirname + "/public"))); // __dirname is very important
 app.use(mongoSanitize());
 
-app.use(
-  helmetSettings
-);
+app.use(helmetSettings);
 
 const store = MongoStore.create({
   mongoUrl: uri,
   touchAfter: 24 * 60 * 60,
   crypto: {
-      secret: process.env.SESSION_SECRET
-  }
+    secret: process.env.SESSION_SECRET,
+  },
 });
 
 store.on("error", function (err) {
   console.log("Store Session Error", err);
-})
+});
 
 // Settings for Session cookies
 const sessionConfig = {

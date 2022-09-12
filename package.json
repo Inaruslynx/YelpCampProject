@@ -4,7 +4,7 @@
   "description": "YelpCamp is a learning project based on the Udemy Course - The Web Developer Bootcamp 2022",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node ./src/index.js"
   },
   "dependencies": {
     "@mapbox/mapbox-sdk": "^0.13.4",
