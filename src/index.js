@@ -3,7 +3,7 @@ const path = require("path");
 const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate");
 const session = require("express-session");
-const MongoDBStore = require("connect-mongo")(session);
+const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const methodOverride = require("method-override");
 const morgan = require("morgan");
@@ -15,6 +15,17 @@ const helmet = require("helmet");
 const User = require("./models/users");
 // const { seed } = require("./seed/seed");
 // const {addAuthor} = require("./utils/addAuthor")
+
+// Import the functions you need from the SDKs you need
+
+const { initializeApp } = require("firebase/app");
+
+const { getAnalytics } = require("firebase/analytics");
+
+// TODO: Add SDKs for Firebase products that you want to use
+
+// https://firebase.google.com/docs/web/setup#available-libraries
+
 
 const campgroundRoutes = require("./routes/campgrounds");
 const reviewRoutes = require("./routes/reviews");
@@ -100,8 +111,21 @@ app.use(
   })
 );
 
+const store = MongoStore.create({
+  mongoUrl: uri,
+  touchAfter: 24 * 60 * 60,
+  crypto: {
+      secret: process.env.SESSION_SECRET
+  }
+});
+
+store.on("error", function (err) {
+  console.log("Store Session Error", err);
+})
+
 // Settings for Session cookies
 const sessionConfig = {
+  store,
   name: "Yelpcamp user",
   secret: process.env.SESSION_SECRET,
   resave: false,
@@ -114,6 +138,36 @@ const sessionConfig = {
     // secure: true,
   },
 };
+
+// Your web app's Firebase configuration
+
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+
+const firebaseConfig = {
+
+  apiKey: "AIzaSyBxcK86hTT3iVC8weMUxi-vqIexocN4SKs",
+
+  authDomain: "yelpcamp-4b680.firebaseapp.com",
+
+  projectId: "yelpcamp-4b680",
+
+  storageBucket: "yelpcamp-4b680.appspot.com",
+
+  messagingSenderId: "654054495964",
+
+  appId: "1:654054495964:web:89060c166c1b512721c619",
+
+  measurementId: "G-PYFGNMQCQ1"
+
+};
+
+
+// Initialize Firebase
+
+const FireBase = initializeApp(firebaseConfig);
+
+// const analytics = getAnalytics(FireBase);
+
 app.use(session(sessionConfig));
 app.use(flash());
 
