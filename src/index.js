@@ -16,17 +16,6 @@ const User = require("./models/users");
 // const { seed } = require("./seed/seed");
 // const {addAuthor} = require("./utils/addAuthor")
 
-// Import the functions you need from the SDKs you need
-
-const { initializeApp } = require("firebase/app");
-
-const { getAnalytics } = require("firebase/analytics");
-
-// TODO: Add SDKs for Firebase products that you want to use
-
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-
 const campgroundRoutes = require("./routes/campgrounds");
 const reviewRoutes = require("./routes/reviews");
 const userRoutes = require("./routes/users");
@@ -138,35 +127,6 @@ const sessionConfig = {
     // secure: true,
   },
 };
-
-// Your web app's Firebase configuration
-
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-
-const firebaseConfig = {
-
-  apiKey: "AIzaSyBxcK86hTT3iVC8weMUxi-vqIexocN4SKs",
-
-  authDomain: "yelpcamp-4b680.firebaseapp.com",
-
-  projectId: "yelpcamp-4b680",
-
-  storageBucket: "yelpcamp-4b680.appspot.com",
-
-  messagingSenderId: "654054495964",
-
-  appId: "1:654054495964:web:89060c166c1b512721c619",
-
-  measurementId: "G-PYFGNMQCQ1"
-
-};
-
-
-// Initialize Firebase
-
-const FireBase = initializeApp(firebaseConfig);
-
-// const analytics = getAnalytics(FireBase);
 
 app.use(session(sessionConfig));
 app.use(flash());
